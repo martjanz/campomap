@@ -1,0 +1,3 @@
+[submodule "lib/leaflet-plugins"]
+	path = lib/leaflet-plugins
+	url = https://github.com/shramov/leaflet-plugins.git
