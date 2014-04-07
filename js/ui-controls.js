@@ -24,11 +24,9 @@ $( document ).ready(function() {
 		clave += String('000' + $("#codLocalidad").val()).slice(-3);
 		clave += String('00' + $("#codFraccion").val()).slice(-2);
 		clave += String('00' + $("#codRadio").val()).slice(-2);
-
-		var sqlQuery = "SELECT cod_part, cod_loc, fraccion, radio, the_geom FROM radios WHERE clavera = '" + clave + "'";
-
+		
 		/* Ejecuta la consulta y obtiene el resultado. */
-		$.getJSON('http://martianz.cartodb.com/api/v2/sql?format=GeoJSON&q=' + sqlQuery + '&api_key=efc2b6c6ac61ee780e96fc3f303a972bfd0b6d12', function(data) {
+		$.getJSON("http://localhost/campomap/sql-api.php?geotable=radios&geomfield=geom&fields=cod_part,cod_loc,fraccion,radio,geom&parameters=clavera='" + clave + "'", function(data) {
 		}).done(function(data) { /* Si existe el radio censal, lo muestra. */
 			mostrarRadio(data);
 		}).fail(function() { /* Si no existe el radio muestra un mensaje de error. */
