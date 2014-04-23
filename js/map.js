@@ -18,7 +18,7 @@ function initMap() {
 	  maxZoom: 18
 	});
 
-	var google_satellite = new L.Google();
+	var google_satellite = new L.Google('HYBRID');
 	var google_terrain = new L.Google('TERRAIN');
 	var bing = new L.BingLayer("AsOWvxBlrK6QzYW2gOFne8C4Ln6OgehGD85BeFZIH-P6s5uIv1rjoftPqjGjZHgd");
 
@@ -39,7 +39,7 @@ function initMap() {
 	 * Max E -36.8763/-56.6662
 	 * Max W -37.8415/-63.3805
 	 *
-	 * == Caja == 
+	 * == Caja ==
 	 *  NE -33.2677/-56.6662
 	 *  SW -41.0373/-63.3805
 	 *
