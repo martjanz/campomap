@@ -19,15 +19,15 @@ function initMap() {
 	});
 
 	var google_satellite = new L.Google('HYBRID');
-	var google_terrain = new L.Google('TERRAIN');
+	var google_roadmap = new L.Google('ROADMAP');
 	var bing = new L.BingLayer("AsOWvxBlrK6QzYW2gOFne8C4Ln6OgehGD85BeFZIH-P6s5uIv1rjoftPqjGjZHgd");
 
 	var baseLayers = {
 	  "OpenStreetMap Internet": osm_remote,
-	  "OpenStreetMap Intranet": osm_intranet,
-	  "Bing Maps": bing,
-	  "Google Satellite": google_satellite,
-	  "Google Terrain": google_terrain
+		"Bing Maps": bing,
+	  "Google Satélite": google_satellite,
+	  "Google Calles": google_roadmap,
+		"OpenStreetMap Intranet": osm_intranet
 	};
 
 	/**
