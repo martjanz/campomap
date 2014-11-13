@@ -1,4 +1,4 @@
-$( document ).ready(function() {
+﻿$( document ).ready(function() {
 
 	initMap();
 
@@ -7,31 +7,44 @@ $( document ).ready(function() {
 		// Evita el submit del botón
 		e.preventDefault();
 
-		/* Chequea que ningún campo esté vacío */
+        // TODO: Chequear que ningún campo esté vacío
 
-		/* Arma la consulta */
-		// http://{account}.cartodb.com/api/v2/sql?format=GeoJSON&q={query}&api_key={API_key}}
-		//efc2b6c6ac61ee780e96fc3f303a972bfd0b6d12
-		clavera: 060070000105
-			provincia: 06
-			partido: 007
-			localidad: 000
-			fraccion: 01
-			radio: 05
-		/* Zerofill identificación. */
+		/* Arma la consulta
+    		clavera: 060070000105
+    			provincia: 06
+    			partido: 007
+    			localidad: 000
+    			fraccion: 01
+    			radio: 05
+		*/
+
+		// Zerofill identificación.
 		var clave = String('00' + $("#codProvincia").val()).slice(-2);
 		clave += String('000' + $("#codDepartamento").val()).slice(-3);
 		clave += String('000' + $("#codLocalidad").val()).slice(-3);
 		clave += String('00' + $("#codFraccion").val()).slice(-2);
 		clave += String('00' + $("#codRadio").val()).slice(-2);
-		
-		/* Ejecuta la consulta y obtiene el resultado. */
-		$.getJSON("http://localhost/campomap/sql-api.php?geotable=radios&geomfield=geom&fields=cod_part,cod_loc,fraccion,radio,geom&parameters=clavera='" + clave + "'", function(data) {
+
+		// Ejecuta la consulta y obtiene el resultado.
+		$.getJSON("http://172.16.48.68/mapa/sql-api.php?geotable=radios&geomfield=geom&fields=cod_part,cod_loc,fraccion,radio,geom&parameters=clavera='" + clave + "'", function(data) {
 		}).done(function(data) { /* Si existe el radio censal, lo muestra. */
 			mostrarRadio(data);
 		}).fail(function() { /* Si no existe el radio muestra un mensaje de error. */
 			alert("No se encontró ningún radio censal con ese código.");
 		});
-		//data = {"type":"MultiPolygon","coordinates":[[[[-63.245679480772644,-37.146831580624053],[-63.24596828807487,-37.14911135370081],[-63.245783393520391,-37.149260529040234],[-63.245538611104578,-37.149456379045773],[-63.24299812767196,-37.151398065754236],[-63.242226308657443,-37.151987935234402],[-63.240891441037654,-37.15300620901489],[-63.23900100938279,-37.154453975371666],[-63.238287305653635,-37.155000388834416],[-63.237491983746494,-37.155612076762615],[-63.238355116247185,-37.155534430669121],[-63.239033372540305,-37.155475346411208],[-63.239723059011119,-37.155420448827485],[-63.241157856040736,-37.155291110999883],[-63.242604078512656,-37.155165946227868],[-63.243988286423075,-37.155037959752725],[-63.245434689299998,-37.154917258869737],[-63.246976042002558,-37.154780426354222],[-63.247564560131487,-37.154728257765036],[-63.248713880674039,-37.154633679007688],[-63.249218989811155,-37.158938500512797],[-63.249421292019996,-37.160639705231993],[-63.249438506980482,-37.160778835534444],[-63.249176099554298,-37.160826567703765],[-63.249093116730464,-37.160990964634252],[-63.249299726626738,-37.162529931504501],[-63.249369065668894,-37.162703657621563],[-63.2494926794392,-37.162830860746595],[-63.249679880662207,-37.162866251915311],[-63.24971489154899,-37.163158006324998],[-63.250976132565938,-37.164096092770976],[-63.252254265703797,-37.165033700922592],[-63.253906227948363,-37.166289761018525],[-63.254941035414475,-37.167062900900795],[-63.255981870798948,-37.167844872020126],[-63.256999085825079,-37.168600463529742],[-63.257935505938349,-37.169308733167419],[-63.258941131868156,-37.170055619372725],[-63.259544296364808,-37.169948946058106],[-63.259968565206087,-37.169869713066007],[-63.260080591421911,-37.169857621240894],[-63.260133498538579,-37.169910203719205],[-63.260281365893952,-37.170077256544602],[-63.272256146122366,-37.166423410737494],[-63.272075315780363,-37.166275297530312],[-63.264226641548426,-37.159894653552186],[-63.263848571768513,-37.15960785973224],[-63.261539327206727,-37.157852168277508],[-63.256497627511848,-37.153910959343492],[-63.249930383981855,-37.14822809220427],[-63.248996901733939,-37.148762587249891],[-63.249699131023249,-37.147032052343526],[-63.246745089416983,-37.146361038580054],[-63.246530797962308,-37.146348901278841],[-63.246475185463503,-37.146363936128985],[-63.246102754305682,-37.146468717223861],[-63.245679480772644,-37.146831580624053]]]]};
+	});
+
+	map.on('baselayerchange', function(e) {
+		if ((e.name == 'Bing Maps') || (e.name == 'Google Satélite')) {
+			$('.leaflet-clickable').css('stroke', '#FFFF00');
+			$('.leaflet-clickable').css('stroke-opacity', '0.7');
+			$('.leaflet-clickable').css('fill', '#FCFFBD');
+			$('.leaflet-clickable').css('fill-opacity', '0.3');
+		} else {
+			$('.leaflet-clickable').css('stroke', '#0033FF');
+			$('.leaflet-clickable').css('stroke-opacity', '0.7');
+			$('.leaflet-clickable').css('fill', '#0033FF');
+			$('.leaflet-clickable').css('fill-opacity', '#0.2');
+		}
 	});
 });
