@@ -2,7 +2,7 @@
 /**
  * PostGIS to GeoJSON
  * Query a PostGIS table or view and return the results in GeoJSON format, suitable for use in OpenLayers, Leaflet, etc.
- * 
+ *
  * @param 		string		$geotable		The PostGIS layer name *REQUIRED*
  * @param 		string		$geomfield		The PostGIS geometry field *REQUIRED*
  * @param 		string		$srid			The SRID of the returned GeoJSON *OPTIONAL (If omitted, EPSG: 4326 will be used)*
@@ -14,56 +14,59 @@
  * @param 		string		$offset			Offset used in conjunction with limit *OPTIONAL*
  * @return 		string					resulting geojson string
  */
+
+require 'logging.php';
+
 function escapeJsonString($value) { # list from www.json.org: (\b backspace, \f formfeed)
   $escapers = array("\\", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c");
   $replacements = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t", "\\f", "\\b");
   $result = str_replace($escapers, $replacements, $value);
   return $result;
 }
- 
+
 # Retrive URL variables
 if (empty($_GET['geotable'])) {
     echo "missing required parameter: <i>geotable</i>";
     exit;
 } else
     $geotable = $_GET['geotable'];
- 
+
 if (empty($_GET['geomfield'])) {
     echo "missing required parameter: <i>geomfield</i>";
     exit;
 } else
     $geomfield = $_GET['geomfield'];
- 
+
 if (empty($_GET['srid'])) {
     $srid = '4326';
 } else
     $srid = $_GET['srid'];
- 
+
 if (empty($_GET['fields'])) {
     $fields = '*';
 } else
     $fields = $_GET['fields'];
- 
+
 $parameters = $_GET['parameters'];
- 
+
 $orderby    = $_GET['orderby'];
- 
+
 if (empty($_GET['sort'])) {
     $sort = 'ASC';
 } else
     $sort = $_GET['sort'];
-	
+
 $limit      = $_GET['limit'];
- 
+
 $offset     = $_GET['offset'];
- 
+
 # Connect to PostgreSQL database
 $conn = pg_connect("dbname='campo' user='osm' password='osmap' host='172.16.50.37' port='5433'");
 if (!$conn) {
     echo "Not connected : " . pg_error();
     exit;
 }
- 
+
 # Build SQL SELECT statement and return the geometry as a GeoJSON element in EPSG: 4326
 $sql = "SELECT " . pg_escape_string($fields) . ", st_asgeojson(transform(st_setsrid(" . pg_escape_string($geomfield) . ", 22185),$srid)) AS geojson FROM " . pg_escape_string($geotable);
 if (strlen(trim($parameters)) > 0) {
@@ -93,7 +96,7 @@ if (!$rs) {
 # Build GeoJSON
 $output    = '';
 $rowOutput = '';
- 
+
 while ($row = pg_fetch_assoc($rs)) {
     $rowOutput = (strlen($rowOutput) > 0 ? ',' : '') . '{"type": "Feature", "geometry": ' . $row['geojson'] . ', "properties": {';
     $props = '';
@@ -106,13 +109,25 @@ while ($row = pg_fetch_assoc($rs)) {
             $id .= ',"id":"' . escapeJsonString($val) . '"';
         }
     }
-    
+
     $rowOutput .= $props . '}';
     $rowOutput .= $id;
     $rowOutput .= '}';
     $output .= $rowOutput;
 }
- 
+
+// Logging class initialization
+$log = new Logging();
+
+// set path and name of log file (optional)
+$log->lfile('logs/sql.txt');
+
+// write message to the log file
+$log->lwrite('Consulta de radio: ' . $parameters);
+
+// close log file
+$log->lclose();
+
 $output = '{ "type": "FeatureCollection", "features": [ ' . $output . ' ]}';
 echo $output;
 ?>
