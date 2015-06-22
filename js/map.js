@@ -31,47 +31,36 @@ function initMap() {
 	};
 
 	/**
-	 * Provincia de Buenos Aires
+	 * Bounding box continental Argentina
 	 *
-	 * == Puntos máximos ==
-	 * Máx N -33.2677/-60.2656
-	 * Max S -41.0373/-62.7340
-	 * Max E -36.8763/-56.6662
-	 * Max W -37.8415/-63.3805
+	 * E -53.367
+     * W -58.583
+     * N -21.783
+     * S -73.533
 	 *
 	 * == Caja == 
-	 *  NE -33.2677/-56.6662
-	 *  SW -41.0373/-63.3805
+	 *  NE -21.783 / -53.367
+	 *  SW -73.533 / -58.583
 	 *
 	 **/
 
-	/* Carga mapa con layer por defecto. */
+	/* Load map with OSM standard as default layer. */
 	map = L.map("map", {
-	  layers: [osm_remote],
-	  maxBounds: [ // Caja dentro de la que se podrá mover la vista.
-	  	[-33, -56.5], // Extremo Noreste
-	  	[-41.04, -63.5]  // Extremo Sudoeste
-	  ]
+	  layers: [osm_remote]
 	});
 
-	var layerControl = L.control.layers(baseLayers).addTo(map);
+	var layerControl = L.control.layers(baseLayers, overlayLayers).addTo(map);
 
-	/*map.addControl(new L.Control.Layers({'OSM Localhost': osm_local, 'OSM Intranet': osm_intranet, 'Google':ggl, 'Google Terrain':ggl2, 'Bing': bing, 'OSM Internet': osm_internet}, {}));*/
-	//map.addControl(new L.Control.Layers({'OSM Internet': osmRemoteTiles}, {}));
-
-	map.fitBounds([[-33, -56.5], [-41.04, -63.5]]);
+	map.fitBounds([[-21.783, -53.367], [-55.057, -58.583]]);
 }
 
 /**
- * function mostrarRadio()
+ * function showPolygon()
  *
- * Carga y muestra en mapa radio censal que recibe por parámetro.
+ * Loads and show polygon
  **/
-function mostrarRadio(input) {
+function showPolygon(input) {
 	var radiosLayer = L.geoJson(input);
-
-	/* Agrega popup*/
-	radiosLayer.bindPopup("Humilde y aleatorio radio censal de prueba.");
 
 	/* Ajusta mapa a layer radio */
 	map.fitBounds(radiosLayer.getBounds(), {duration: 1, animate: true});
