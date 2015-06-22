@@ -1,34 +1,56 @@
 var map = "";
 
 function initMap() {
-	// OpenStreetMap VM - Sólo tiles Argentina
-	/*var osm_local = new L.tileLayer('http://localhost:8001/osm_tiles/{z}/{x}/{y}.png', {
-	  attribution: 'Mapa base &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>, Licencia <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imágenes © <a href="http://cloudmade.com">CloudMade</a>',
-	  maxZoom: 18
-	}).addTo(map);*/
+    // Load map layers
 
-	// OpenStreetMap VM (acceso desde intranet) - Sólo tiles Argentina
-	var osm_intranet = new L.tileLayer('http://172.16.48.68:8001/osm_tiles/{z}/{x}/{y}.png', {
-	  attribution: 'Mapa base &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>, Licencia <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imágenes © <a href="http://cloudmade.com">CloudMade</a>',
-	  maxZoom: 18
-	});
-
+    // OpenStreetMap default tiles
 	var osm_remote = new L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 	  attribution: 'Mapa base &copy; Contribuyentes de <a href="http://openstreetmap.org">OpenStreetMap</a>, Licencia <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
 	  maxZoom: 18
 	});
 
-	var google_satellite = new L.Google();
-	var google_terrain = new L.Google('TERRAIN');
-	var bing = new L.BingLayer("AsOWvxBlrK6QzYW2gOFne8C4Ln6OgehGD85BeFZIH-P6s5uIv1rjoftPqjGjZHgd");
+    // Google layers
+	var google_hybrid = new L.Google('HYBRID');
+	var google_roadmap = new L.Google('ROADMAP');
+
+    // Bing Maps layers
+	var bing_roadmap = new L.BingLayer("AsOWvxBlrK6QzYW2gOFne8C4Ln6OgehGD85BeFZIH-P6s5uIv1rjoftPqjGjZHgd", {type: 'Road'});
+    var bing_hybrid = new L.BingLayer("AsOWvxBlrK6QzYW2gOFne8C4Ln6OgehGD85BeFZIH-P6s5uIv1rjoftPqjGjZHgd", {type: 'AerialWithLabels'});
+
+    // OpenStreetMap - Transport lines (Andy Allan's custom tiles)
+    var osm_transport = new L.tileLayer('http://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png', {
+        attribution: 'Mapa base &copy; Colaboradores de <a href="http://openstreetmap.org">OpenStreetMap</a>. Design: <a href="http://www.thunderforest.com/">Andy Allan</a>',
+	  maxZoom: 18
+	});
+
+    // OpenStreetMap - unnamed streets (Simon Poole's custom tiles)
+    var osm_unnamed_streets  = new L.tileLayer('http://tile3.poole.ch/noname/{z}/{x}/{y}.png', {
+          attribution: 'Mapa base &copy; Colaboradores de <a href="http://openstreetmap.org">OpenStreetMap</a>. Design: <a href="http://www.thunderforest.com/">Simon Poole</a>',
+        transparent: true,
+        attribution: "Simon Poole",
+        tiled: true
+    });
+
+    // OpenStreetMap "artistic" tiles
+    var osm_stamen = new L.tileLayer('http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg', {
+        attribution: 'Mapa base &copy; Colaboradores de <a href="http://openstreetmap.org">OpenStreetMap</a>. Diseño de mosaicos: <a href="http://www.stamen.com/">Stamen</a>',
+        maxZoom: 18
+    });
 
 	var baseLayers = {
 	  "OpenStreetMap Internet": osm_remote,
-	  "OpenStreetMap Intranet": osm_intranet,
-	  "Bing Maps": bing,
-	  "Google Satellite": google_satellite,
-	  "Google Terrain": google_terrain
+        "OpenStreetMap Transporte": osm_transport,
+        "OpenStreetMap artístico": osm_stamen,
+        "Bing Maps Calles": bing_roadmap,
+        "Bing Maps Híbrido": bing_hybrid,
+        "Google Calles": google_roadmap,
+        "Google Híbrido": google_hybrid
 	};
+
+    var overlayLayers = {
+        "Calles sin nombre (OSM)": osm_unnamed_streets
+    }
+
 
 	/**
 	 * Bounding box continental Argentina
