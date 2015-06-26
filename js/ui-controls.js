@@ -23,7 +23,7 @@ $( document ).ready(function() {
 		clave += String('00' + $("#codFraccion").val()).slice(-2);
 		clave += String('00' + $("#codRadio").val()).slice(-2);
 
-		var sqlQuery = "SELECT the_geom FROM cnphyv2010_radios WHERE cod_indec = '" + clave + "'";
+		var sqlQuery = "SELECT the_geom FROM cnphyv2010 WHERE cod_indec = '" + clave + "'";
 
 		/* Ejecuta la consulta y obtiene el resultado. */
 		$.getJSON('http://martianz.cartodb.com/api/v2/sql?format=GeoJSON&q=' + sqlQuery, function(data) {
