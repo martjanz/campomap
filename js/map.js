@@ -60,7 +60,7 @@ function initMap() {
      * N -21.783
      * S -73.533
 	 *
-	 * == Caja == 
+	 * == Caja ==
 	 *  NE -21.783 / -53.367
 	 *  SW -73.533 / -58.583
 	 *
@@ -82,11 +82,34 @@ function initMap() {
  * Loads and show polygon
  **/
 function showPolygon(input) {
-	var radiosLayer = L.geoJson(input);
+	var polygon = L.geoJson(input);
 
-	/* Ajusta mapa a layer radio */
-	map.fitBounds(radiosLayer.getBounds(), {duration: 1, animate: true});
+    var codIndec = input.features[0].properties.cod_indec;
+    var provincia = codIndec.substr(0, 2);
+    var departamento = codIndec.substr(2, 3);
+    var fraccion = codIndec.substr(5, 2);
+    var radio = codIndec.substr(7, 2);
 
-	/* Muestra layer radio */
-	radiosLayer.addTo(map);
+    console.log(codIndec);
+
+/** CSS
+table tr:nth-child(2n)
+    background-color: #F8F8F8;
+table tr
+    border-top: 1px solid #CCC
+*/
+    var HTMLstring = '<table style="font-size: 10pt">' +
+        '<tr><td><strong>Provincia</strong></td><td>' + provincia + '</td></tr>' +
+        '<tr><td><strong>Depto.</strong></td><td>' + departamento + '</td></tr>' +
+        '<tr><td><strong>Fracción</strong></td><td>' + fraccion + '</td></tr>' +
+        '<tr><td><strong>Radio</strong></td><td>' + radio + '</td></tr>' +
+    '</table>';
+
+    polygon.bindPopup(HTMLstring);
+
+	// Ajusta mapa a layer radio
+	map.fitBounds(polygon.getBounds(), {duration: 1, animate: true});
+
+	// Muestra layer radio
+	polygon.addTo(map);
 }
