@@ -1,16 +1,17 @@
 ﻿CampoMap
 ========
-Los datos están, hay que usarlos.
+
+[Acá](http://martjanz.github.io/campomap/) puede verse en funcionamiento.
 
 Objetivo
 --------
-Este es un proyecto, nacido y criado en mi tiempo libre, que surge de la necesidad de combinar datos de cartografía censal con capas de servicios web de mosaicos geográficos descriptivos (OpenStreetMap) y/o satelitales (Google Maps Satellital, Bing Maps, etc).
+Visualizar cartografía censal sobre servicios de mapas como [OpenStreetMap](http://openstreetmap.org), [Google Maps](http://maps.google.com), [Bing Maps](http://maps.bing.com/), etc.
 
 Fuentes de datos
 ----------------
-La cartografía censal 2010 de Buenos Aires y Ciudad Aut—noma de Buenos Aires est‡ publicada en los sitios web de las respectivas Direcciones Provinciales de Estadística.
+La cartografía censal 2010 a nivel de radio fue publicada por el Instituto Nacional de Estadística y Censos a mediados de 2015.
 
-La cartografía de OpenStreetMap es pública, libre y comunitaria. Puede descargarse como archivo para ser utilizada en un servidor de base de datos local PostgreSQL con extensión geográfica PostGIS.
+La cartografía de OpenStreetMap es pública, libre y comunitaria.
 
 Librerías
 ---------
@@ -19,5 +20,6 @@ Librerías
 * Leaflet-plugins 1.1 (https://github.com/shramov/leaflet-plugins)
 * Bootstrap 3.1.1
 
-== Base de datos ==
+Base de datos
+-------------
 PostgreSQL (con extensión PostGIS)
